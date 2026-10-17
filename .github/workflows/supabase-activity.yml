@@ -1,0 +1,20 @@
+name: Supabase activity
+
+on:
+  schedule:
+    - cron: "00 23 * * *"
+  workflow_dispatch:
+
+jobs:
+  read-memo-table:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read one memo row
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          curl --fail --silent --show-error --output /dev/null \
+            "${SUPABASE_URL}/rest/v1/travel_memos?select=id&limit=1" \
+            -H "apikey: ${SUPABASE_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_KEY}"
